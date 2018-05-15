@@ -422,9 +422,33 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
+  //inputs: 1 array is passed in
+  //outputs: 1 array is returned
+  //assumptions: the output of the function may be the same array as the array contents are re-positioned randomly
+  //constaints: only 1 array (only an array) can be passed in
+  //edge cases: array can consist of all primitive data types, should work for mixed arrays: [2, true. [2, 3, 4], 'cheese'] 
+  //transformations: array = [2, true. [2, 3, 4], 'cheese'] => [[2, 3, 4], true, 'cheese', 2]
+  //array = [1,2,3,4,5];
   _.shuffle = function(array) {
     /* START SOLUTION */
+    //make an empty
+    var randomizedValues = []; //[2]
+    var index = []; // ['used','used',2,3,4]
+    for (var i = 0; i < array.length; i++) {
+      index.push(i);
+    }
 
+    //iterate through passed in array
+    while (randomizedValues.length < array.length) {
+      var ranNum = Math.floor(Math.random() * Math.floor(array.length)); 
+      //push element at random index into empty array
+      if(index[ranNum] !== 'used') {
+        randomizedValues.push(array[ranNum]);
+        index.splice(ranNum, 1, 'used');
+      }
+    }
+    //return empty (randomized) array
+    return randomizedValues;
     /* END SOLUTION */
   };
 
