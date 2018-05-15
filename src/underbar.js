@@ -284,17 +284,34 @@
   //constraints: n/a
   //edge cases: if the name of the key is all the same should it add the same key name as a different property or add an extra value into the same one key
   //_.extend({'food1': 'muffin'}, {'food2': 'croissant', 'food3: 'danish'}) => {'food1': 'muffin', 'food2': 'croissant', 'food3': 'danish'}
+  /*
+  destination = {'food1': 'muffin'}, source = {'food2': 'croissant', 'food3: 'danish'}, {'food4': 'bagel'}
+  */
   _.extend = function(obj) {
     /* START SOLUTION */
-
+    //access the properties in the passed in arguments (objects other than the base obj)
+    _.each(arguments, function(object) {
+      for (var key in object) {
+        //move properties to the base object
+        obj[key] = object[key];
+      }
+    });
+    //return base object
+    return obj;
     /* END SOLUTION */
   };
-
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
     /* START SOLUTION */
-
+    _.each(arguments, function(object) {
+      for (var key in object) {
+        if (!(key in obj)) {
+          obj[key] = object[key];
+        }
+      }
+    });
+    return obj;
     /* END SOLUTION */
   };
 
@@ -309,12 +326,32 @@
 
   // Return a function that can be called at most one time. Subsequent calls
   // should return the previously returned value.
+  //inputs: 1 function is passed in
+  //outputs: returns value from the return value in the passed in function
+  //edge cases: what if the passed in function has no return value, what if a func is not passed in
+  //transformations: func = function multiply(num) {return num * 2;};
+  //multiply(6); returns 12
+  //multiply(7); return 12
   _.once = function(func) {
     // TIP: These variables are stored in a "closure scope" (worth researching),
     // so that they'll remain available to the newly-generated function every
     // time it's called.
     /* START SOLUTION */
-
+    //create var to store return value of passed in func
+    var value;
+    //make a var called isCalled and set to false
+    var isCalled = false;
+      //if the function is called the first time
+      return function() {
+        if (isCalled === false) {
+        //invoke the passed in function
+        value = func.apply(null, arguments);
+        //set isCalled to true
+        isCalled = true;
+        }
+       //return stored value of first invocation of passed in func
+       return value;
+      };
     /* END SOLUTION */
   };
 
