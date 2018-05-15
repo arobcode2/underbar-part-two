@@ -394,9 +394,20 @@
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
+  //inputs: passing 1 function as first arg, and a number (number of milliseconds the function will wait to invoke the passed in function)
+  //outputs: returns the given function
+  //constraints: n/a
+  //edge cases: what if the passed in function doesn't return anything
+  //transformations: _.delay(someFunction, 500, 'a', 'b') => someFunction will take the arguments 'a' and 'b' and someFunction will be invoked after 500 milliseconds
   _.delay = function(func, wait) {
     /* START SOLUTION */
-
+    //store arguments (that passed in function may take) in a var
+    var args = [...arguments].slice(2);
+    //call setTimeout with proper parameters
+    return setTimeout(function() {
+      //calls the function
+      func.apply(null, args);
+    }, wait);
     /* END SOLUTION */
   };
 
