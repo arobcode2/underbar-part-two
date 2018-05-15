@@ -363,10 +363,29 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-  _.memoize = function(func) {
+  //transformations: func = function quotient(num) {return num / 2;}; storage = {quotient(16): 8}
+  //quotient(16) returns 8
+  //quotient(18)  => storage = {quotient(16): 8, quotient(18): 9}
+  //quotient(18) returns 9
+ _.memoize = function(func) {
     /* START SOLUTION */
-
+    //create an object to store results of passed in function
+    var storage = {};
+    //if result has been computed
+    return function() {
+      var key = JSON.stringify(arguments);
+      if (storage[key]) {
+        //return result from results storage var
+        return storage[key];
+      }
+      //invoke the passed in function
+      storage[key] = func.apply(null, arguments);
+      //return result and store that result into the storage
+      return storage[key];
+      };
     /* END SOLUTION */
+    // _.momoize(function a(2,3,4,5,6) {return x * 2})
+    // _.memoize(function b([2,3,4,5,6]) {return y / 2})
   };
 
   // Delays a function for the given number of milliseconds, and then calls
