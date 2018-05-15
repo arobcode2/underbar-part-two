@@ -284,17 +284,34 @@
   //constraints: n/a
   //edge cases: if the name of the key is all the same should it add the same key name as a different property or add an extra value into the same one key
   //_.extend({'food1': 'muffin'}, {'food2': 'croissant', 'food3: 'danish'}) => {'food1': 'muffin', 'food2': 'croissant', 'food3': 'danish'}
+  /*
+  destination = {'food1': 'muffin'}, source = {'food2': 'croissant', 'food3: 'danish'}, {'food4': 'bagel'}
+  */
   _.extend = function(obj) {
     /* START SOLUTION */
-
+    //access the properties in the passed in arguments (objects other than the base obj)
+    _.each(arguments, function(object) {
+      for (var key in object) {
+        //move properties to the base object
+        obj[key] = object[key];
+      }
+    });
+    //return base object
+    return obj;
     /* END SOLUTION */
   };
-
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
     /* START SOLUTION */
-
+    _.each(arguments, function(object) {
+      for (var key in object) {
+        if (!(key in obj)) {
+          obj[key] = object[key];
+        }
+      }
+    });
+    return obj;
     /* END SOLUTION */
   };
 
@@ -309,12 +326,32 @@
 
   // Return a function that can be called at most one time. Subsequent calls
   // should return the previously returned value.
+  //inputs: 1 function is passed in
+  //outputs: returns value from the return value in the passed in function
+  //edge cases: what if the passed in function has no return value, what if a func is not passed in
+  //transformations: func = function multiply(num) {return num * 2;};
+  //multiply(6); returns 12
+  //multiply(7); return 12
   _.once = function(func) {
     // TIP: These variables are stored in a "closure scope" (worth researching),
     // so that they'll remain available to the newly-generated function every
     // time it's called.
     /* START SOLUTION */
-
+    //create var to store return value of passed in func
+    var value;
+    //make a var called isCalled and set to false
+    var isCalled = false;
+      //if the function is called the first time
+      return function() {
+        if (isCalled === false) {
+        //invoke the passed in function
+        value = func.apply(null, arguments);
+        //set isCalled to true
+        isCalled = true;
+        }
+       //return stored value of first invocation of passed in func
+       return value;
+      };
     /* END SOLUTION */
   };
 
@@ -326,10 +363,29 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-  _.memoize = function(func) {
+  //transformations: func = function quotient(num) {return num / 2;}; storage = {quotient(16): 8}
+  //quotient(16) returns 8
+  //quotient(18)  => storage = {quotient(16): 8, quotient(18): 9}
+  //quotient(18) returns 9
+ _.memoize = function(func) {
     /* START SOLUTION */
-
+    //create an object to store results of passed in function
+    var storage = {};
+    //if result has been computed
+    return function() {
+      var key = JSON.stringify(arguments);
+      if (storage[key]) {
+        //return result from results storage var
+        return storage[key];
+      }
+      //invoke the passed in function
+      storage[key] = func.apply(null, arguments);
+      //return result and store that result into the storage
+      return storage[key];
+      };
     /* END SOLUTION */
+    // _.momoize(function a(2,3,4,5,6) {return x * 2})
+    // _.memoize(function b([2,3,4,5,6]) {return y / 2})
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -338,9 +394,20 @@
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
+  //inputs: passing 1 function as first arg, and a number (number of milliseconds the function will wait to invoke the passed in function)
+  //outputs: returns the given function
+  //constraints: n/a
+  //edge cases: what if the passed in function doesn't return anything
+  //transformations: _.delay(someFunction, 500, 'a', 'b') => someFunction will take the arguments 'a' and 'b' and someFunction will be invoked after 500 milliseconds
   _.delay = function(func, wait) {
     /* START SOLUTION */
-
+    //store arguments (that passed in function may take) in a var
+    var args = [...arguments].slice(2);
+    //call setTimeout with proper parameters
+    return setTimeout(function() {
+      //calls the function
+      func.apply(null, args);
+    }, wait);
     /* END SOLUTION */
   };
 
@@ -355,9 +422,33 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
+  //inputs: 1 array is passed in
+  //outputs: 1 array is returned
+  //assumptions: the output of the function may be the same array as the array contents are re-positioned randomly
+  //constaints: only 1 array (only an array) can be passed in
+  //edge cases: array can consist of all primitive data types, should work for mixed arrays: [2, true. [2, 3, 4], 'cheese'] 
+  //transformations: array = [2, true. [2, 3, 4], 'cheese'] => [[2, 3, 4], true, 'cheese', 2]
+  //array = [1,2,3,4,5];
   _.shuffle = function(array) {
     /* START SOLUTION */
+    //make an empty
+    var randomizedValues = []; //[2]
+    var index = []; // ['used','used',2,3,4]
+    for (var i = 0; i < array.length; i++) {
+      index.push(i);
+    }
 
+    //iterate through passed in array
+    while (randomizedValues.length < array.length) {
+      var ranNum = Math.floor(Math.random() * Math.floor(array.length)); 
+      //push element at random index into empty array
+      if(index[ranNum] !== 'used') {
+        randomizedValues.push(array[ranNum]);
+        index.splice(ranNum, 1, 'used');
+      }
+    }
+    //return empty (randomized) array
+    return randomizedValues;
     /* END SOLUTION */
   };
 
