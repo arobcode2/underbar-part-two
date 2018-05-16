@@ -522,6 +522,21 @@
         expect(shuffled).to.not.eql([4, 5, 6, 7, 8, 9, 10]);
       });
 
+      it('should shuffle elements that are not numbers', function() {
+        var strings = ['peanut butter', 'jelly', 'bread', 'plate', 'glass of milk'].sort();
+        var shuffled = _.shuffle(strings).sort();
+        expect(shuffled).to.eql(strings);
+      });
+
+      it ('should produce a shuffled array at a relatively fast speed', function() {
+        var numbers = [];
+        for (var i = 0; i < 100000; i++) {
+          numbers.push(i);
+        }
+        var shuffled = _.shuffle(numbers);
+        expect(shuffled).to.equal(shuffled);
+      });
+
     });
 
   });

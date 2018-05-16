@@ -431,27 +431,42 @@
   //constaints: only 1 array (only an array) can be passed in
   //edge cases: array can consist of all primitive data types, should work for mixed arrays: [2, true. [2, 3, 4], 'cheese'] 
   //transformations: array = [2, true. [2, 3, 4], 'cheese'] => [[2, 3, 4], true, 'cheese', 2]
-  //array = [1,2,3,4,5];
+  //process: swap elements at random index with another element at a random index- array = [1,2,3,4,5], indicies = 0, 1, 2, 3, 4, array[ranNum] = array[ranNum]
   _.shuffle = function(array) {
     /* START SOLUTION */
     //make an empty
-    var randomizedValues = []; //[2]
-    var index = []; // ['used','used',2,3,4]
-    for (var i = 0; i < array.length; i++) {
-      index.push(i);
-    }
+    // var randomizedValues = []; //[2]
+    // var index = []; // ['used','used',2,3,4]
+    // for (var i = 0; i < array.length; i++) {
+    //   index.push(i);
+    // }
 
-    //iterate through passed in array
-    while (randomizedValues.length < array.length) {
-      var ranNum = Math.floor(Math.random() * Math.floor(array.length)); 
-      //push element at random index into empty array
-      if(index[ranNum] !== 'used') {
-        randomizedValues.push(array[ranNum]);
-        index.splice(ranNum, 1, 'used');
-      }
+    // //iterate through passed in array
+    // while (randomizedValues.length < array.length) {
+    //   var ranNum = Math.floor(Math.random() * Math.floor(array.length)); 
+    //   //push element at random index into empty array
+    //   if(index[ranNum] !== 'used') {
+    //     randomizedValues.push(array[ranNum]);
+    //     index.splice(ranNum, 1, 'used');
+    //   }
+    // }
+    // //return empty (randomized) array
+    // return randomizedValues;
+
+    //use slice to make a copy of passed in array
+    //make a random index numbers array first by using a for loop
+    // if array.length === 7 => 7 items 4,6,3,2,5,1,7 
+    
+    var arrayCopy = array.slice();
+    var swappedEl;
+    //[1, 2, 3], swappedEl = 1,  ranNum = 2, [3, 2, 1], ranNum = 0, swappedEl = 3, [2, 3, 1]
+    for (var i = 0; i < arrayCopy.length; i++) {
+      var ranNum = Math.floor(Math.random() * Math.floor(array.length));
+      swappedEl = arrayCopy[i];
+      arrayCopy[i] = arrayCopy[ranNum];
+      arrayCopy[ranNum] = swappedEl;
     }
-    //return empty (randomized) array
-    return randomizedValues;
+    return arrayCopy;
     /* END SOLUTION */
   };
 
