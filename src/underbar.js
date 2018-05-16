@@ -254,9 +254,12 @@
     // TIP: There's a very clever way to re-use every() here.
     /* START SOLUTION */
     iterator = iterator || _.identity;
-    return !_.every(collection, function(element) {
-        return !iterator(element);
-    });
+    for (var i in collection) {
+      if (iterator(collection[i])) {
+        return true;
+      }
+    }
+    return false;
     /* END SOLUTION */
   };
 
