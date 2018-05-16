@@ -481,9 +481,16 @@
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
+  //inputs: 1 collection (array or object), method name, optional arguments
+  //outputs: 1 collection is returned (however the output value depends on the return value of the method applied on the collection)
+  //constraints: collection and functionOrKey must be passed in, the method must work on both arrays and objects
+  //edge cases: some methods require the collection to be passed in to the method as arguments and other do not (i.e. collection.sort())
+  //transformations: collection: [1, 2, 3, 4], functionOrKey = length, output: 4
+  //collection: [4, 1, 2, 3], functionOrKey = sort, output: [1, 2, 3, 4]
+  //collection: [1, 2, 3, 4], functionOrKey = slice, args = 1, output: [2, 3, 4]
   _.invoke = function(collection, functionOrKey, args) {
     /* START SOLUTION */
-    
+    //
     /* END SOLUTION */
   };
 
